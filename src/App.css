@@ -1,0 +1,16 @@
+.grid-parent {
+	display: grid;
+	grid-template-rows: 75px 30px 75px;
+	height: 100%;
+	background-color: lightgray;
+}
+
+.split-screen {
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	min-height: 0;           /* IMPORTANT for scrolling children */
+  	height: 100%;
+}
+
+
+

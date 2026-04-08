@@ -1,0 +1,7 @@
+/* right panel - vertical scrolling episodes */
+.episode-list {
+	background-color: lightgoldenrodyellow;
+	overflow-y: auto;        /* vertical scroll */
+	min-height: 0;           /* IMPORTANT */
+	padding: 8px;
+}

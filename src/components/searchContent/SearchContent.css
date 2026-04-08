@@ -1,0 +1,26 @@
+/* Horizontal scrolling tabs */
+.tab-list {
+	background-color: pink;
+	display: grid;
+	grid-auto-flow: column;   /* place items horizontally */
+	grid-auto-columns: max-content; /* each tab sizes to its content */
+	overflow-x: auto;         /* horizontal scroll */
+	overflow-y: hidden;
+	padding-top: 5px;
+}
+
+.tab {
+	padding: 2px;
+	border: black solid 1px;
+	border-bottom: none;
+	border-radius: 3px 3px 0 0;
+}
+
+.search-button-list {
+	padding: 5px;
+	background-color: lightpink;
+}
+
+.search-button {
+	background-color: white;
+}
