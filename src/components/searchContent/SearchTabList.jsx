@@ -1,12 +1,12 @@
-export function SearchTabList({tabs, selectedTab, setSelectedTab}) {
+export function SearchTabList({tabList, selectedTab, setSelectedTab}) {
 
 	return (
 		<div className="tab-list">
-			{tabs.map((tab) => (
+			{tabList.map((tab) => (
 				<div	
 					key={tab}
 					className={`tab ${selectedTab === tab ? "active" : ""}`}
-					onClick={() => setSelectedTab(tab)}
+					onClick={() => setSelectedTab(tab)} // set the seletedTab state in App.jsx
 				>
 					{tab}
 				</div>

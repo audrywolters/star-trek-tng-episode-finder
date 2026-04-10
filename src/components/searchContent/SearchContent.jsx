@@ -3,17 +3,17 @@ import { SearchTabList } from "./SearchTabList"
 import { SearchButtonList } from "./SearchButtonList"
 import './SearchContent.css'
 
-export function SearchContent({ tabs, selectedTab, setSelectedTab, buttons }) {
+export function SearchContent({ tabList, selectedTab, setSelectedTab, searchButtonNameList }) {
 
 	return (
 		<>
 			<SearchTabList
-				tabs={tabs}
-				selectedTab={selectedTab}
-				setSelectedTab={setSelectedTab}
+				tabList={tabList}
+				selectedTab={selectedTab} // state
+				setSelectedTab={setSelectedTab} // state
 			/>
 
-			<SearchButtonList buttons={buttons} />
+			<SearchButtonList searchButtonNameList={searchButtonNameList} />
 		</>
 	)
 }

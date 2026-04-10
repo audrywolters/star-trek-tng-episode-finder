@@ -1,9 +1,9 @@
-export function SearchButtonList({ buttons }) {
+export function SearchButtonList({ searchButtonNameList }) {
 	return (
 		<div className="search-button-list">
-			{buttons.map((button) => (
-				<button key={button} className="search-button">
-					{button}
+			{searchButtonNameList.map((buttonName) => (
+				<button key={buttonName} className="search-button">
+					{buttonName}
 				</button>
 			))}
 		</div>

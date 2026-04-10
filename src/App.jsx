@@ -7,26 +7,31 @@ import './App.css'
 
 function App() {
 
-  const data = [
-    { name: "Character", buttons: ["Picard", "Crusher"] },
-    { name: "Genre", buttons: ["Action", "Drama"] }
+  // mock data
+  const searchData = [
+    { tabName: "Character", searchButtonNameList: ["Picard", "Crusher"] },
+    { tabName: "Genre", searchButtonNameList: ["Action", "Drama"] }
   ]	
 
+  // state
   const [selectedTab, setSelectedTab] = useState("Character")
 
-  const tabs = data.map(item => item.name)
-  const selected = data.find(item => item.name === selectedTab)
-  const buttons = selected?.buttons || []
+  // manipulate the tabs and their buttons
+  const tabNameList = searchData.map(data => data.tabName)
+  const selectedTabData = searchData.find(data => data.tabName === selectedTab)
+  const selectedTabSearchButtonNameList = selectedTabData?.searchButtonNameList || []
+
+  
 
   return (
       <div className="grid-parent">
         <Header />
 
         <SearchContent 
-          tabs={tabs} 
-          selectedTab={selectedTab} 
-          setSelectedTab={setSelectedTab}
-          buttons={buttons} />
+          tabList={tabNameList} 
+          selectedTab={selectedTab} // state 
+          setSelectedTab={setSelectedTab} // state
+          searchButtonNameList={selectedTabSearchButtonNameList} />
 
 
         <div className="split-screen">
