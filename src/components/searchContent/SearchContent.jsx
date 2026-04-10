@@ -3,7 +3,7 @@ import { SearchTabList } from "./SearchTabList"
 import { SearchButtonList } from "./SearchButtonList"
 import './SearchContent.css'
 
-export function SearchContent({ tabList, selectedTab, setSelectedTab, searchButtonNameList }) {
+export function SearchContent({ tabList, selectedTab, setSelectedTab, searchButtonNameList, onButtonClick }) {
 
 	return (
 		<>
@@ -13,7 +13,10 @@ export function SearchContent({ tabList, selectedTab, setSelectedTab, searchButt
 				setSelectedTab={setSelectedTab} // state
 			/>
 
-			<SearchButtonList searchButtonNameList={searchButtonNameList} />
+			<SearchButtonList 
+				searchButtonNameList={searchButtonNameList}
+				onButtonClick={onButtonClick} 
+			/>
 		</>
 	)
 }

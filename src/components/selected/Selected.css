@@ -5,3 +5,18 @@
 	min-height: 0;           /* IMPORTANT */
 	padding: 8px;
 }
+
+.selected-button {
+	display: inline-block;        
+    padding: 5px;
+    background-color: #ededed;
+    color: black;
+    text-align: center;
+    border: 1px solid darkgray;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.remove-button {
+	border: none;
+}
