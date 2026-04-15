@@ -1,82 +1,97 @@
 import { useEffect, useState } from 'react'
 import { Header } from './components/Header'
-import { SearchContent } from './components/searchContent/SearchContent' 
+import { SearchContent } from './components/searchContent/SearchContent'
 import { SelectedList } from './components/selected/SelectedList'
 import { EpisodeList } from './components/episode/EpisodeList'
 import './App.css'
 
 function App() {
+	// mock data that would be coming from backend
+  // it is structured data that is all the stuff used to search for an episode
+	const searchData = [
+		{ 
+      tabName: 'Character', 
+      backendTable: 'characters',
+      searchButtonNameList: ['Picard', 'Crusher']
+    },
+		{ 
+      tabName: 'Genre', 
+      backendTable: 'genres',
+      searchButtonNameList: ['Action', 'Problem Solving'] }
+	]
 
-  // mock data
-  const searchData = [
-    { tabName: "Character", searchButtonNameList: ["Picard", "Crusher"] },
-    { tabName: "Genre", searchButtonNameList: ["Action", "Problem Solving"] }
-  ]	
+  // tracks which tab is currently selected (it is set in SearchTabList.jsx)
+	const [selectedTab, setSelectedTab] = useState('Character')
+  
+  // collects all the search buttons clicked 
+  // and keeps the tabname/backend table name tied to it
+	const [selectedButtonList, setSelectedButtonList] = useState([])
 
-  // state
-  const [selectedTab, setSelectedTab] = useState("Character")
-  const [selectedButtonList, setSelectedButtonList] = useState({
-    characters: [],
-    genres: []
-    // aliens
-    // misc
-  })
+	// find all the tab names from the backend
+	const tabNameList = searchData.map((data) => data.tabName)
 
-  // manipulate the tabs and their buttons
-  const tabNameList = searchData.map(data => data.tabName)
-  const selectedTabData = searchData.find(data => data.tabName === selectedTab)
-  const selectedTabSearchButtonNameList = selectedTabData?.searchButtonNameList || []
+  // grabs all the data linked to the selected tab
+  // like tabName, backendTable, searchButtonNameList
+	const selectedTabData = searchData.find(
+		(data) => data.tabName === selectedTab
+	)
 
-  // when clicking on a search button, add it to the selectedButtonList state
-  // keep the data structure ready for the backend (to search by column)
-  const tabMapping = {
-    Character: 'characters',
-    Genre: 'genres'
-  }
+  // by the selcted tab, display the buttons that are under the tab category
+	const selectedTabSearchButtonList =
+		selectedTabData?.searchButtonNameList || []
 
-  const handleSearchButtonClick = (searchButtonName) => {
-    const selectedKey = tabMapping[selectedTab]
+  // click a search button
+	const handleSearchButtonClick = (searchButtonName) => {
+    const selectedBackendTable = selectedTabData?.backendTable
+		
+    // backout if there is no table/category/tabName
+    if (!selectedBackendTable) return
 
-    if (selectedKey) {
-      setSelectedButtonList(prev => {
-        // check for duplicates
-        if(!prev[selectedKey].includes(searchButtonName)) {
-          return {
-            // add to list
-            ...prev,
-            [selectedKey]: [...prev[selectedKey], searchButtonName]
-          }
-        }
-        return prev
-      })
-    }
-  }
+    // update state
+    // this state will be an object with the button name and it's tab category along with it
+    // we will need to tie the 2 together so we can query the DB
+    // while maintaining the order the buttons have been clicked
+		setSelectedButtonList((prev) => {
 
-  // for testing only
-  useEffect(() => {
-    console.log(selectedButtonList)
-  }, [selectedButtonList])
+			// check for duplicates
+			const alreadyExists = prev.some(
+				(item) => item.name === searchButtonName && item.backendTable === selectedBackendTable
+			)
 
-  return (
-      <div className="grid-parent">
-        <Header />
+      // don't allow a duplicate button
+			if (alreadyExists) return prev
 
-        <SearchContent 
-          tabList={tabNameList} 
-          selectedTab={selectedTab} // state 
-          setSelectedTab={setSelectedTab} // state
-          searchButtonNameList={selectedTabSearchButtonNameList}
-          onButtonClick={handleSearchButtonClick} />
+			// if not already selected, add to state
+      // and form the object so we may track the data for the DB
+			return [...prev, { name: searchButtonName, backendTable: selectedBackendTable }]
+		})
+	}
 
+	// for testing only
+	useEffect(() => {
+		console.log(selectedButtonList)
+	}, [selectedButtonList])
 
-        <div className="split-screen">
-          <SelectedList 
-            selectedButtonList={selectedButtonList}
-          />
-          <EpisodeList />
-        </div>
-      </div>
-  )
+	return (
+		<div className="grid-parent">
+			<Header />
+
+			<SearchContent
+				tabList={tabNameList}
+				selectedTab={selectedTab} // state
+				setSelectedTab={setSelectedTab} // state
+				searchButtonList={selectedTabSearchButtonList}
+				onButtonClick={handleSearchButtonClick}
+			/> 
+
+			<div className="split-screen">
+				<SelectedList 
+          selectedButtonList={selectedButtonList} // state
+        />
+				<EpisodeList />
+			</div>
+		</div>
+	)
 }
 
 export default App

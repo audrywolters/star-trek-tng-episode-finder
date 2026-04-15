@@ -1,9 +1,8 @@
-//import { useState } from "react"
 import { SearchTabList } from "./SearchTabList"
 import { SearchButtonList } from "./SearchButtonList"
 import './SearchContent.css'
 
-export function SearchContent({ tabList, selectedTab, setSelectedTab, searchButtonNameList, onButtonClick }) {
+export function SearchContent({ tabList, selectedTab, setSelectedTab, searchButtonList, onButtonClick }) {
 
 	return (
 		<>
@@ -14,7 +13,7 @@ export function SearchContent({ tabList, selectedTab, setSelectedTab, searchButt
 			/>
 
 			<SearchButtonList 
-				searchButtonNameList={searchButtonNameList}
+				searchButtonList={searchButtonList}
 				onButtonClick={onButtonClick} 
 			/>
 		</>
