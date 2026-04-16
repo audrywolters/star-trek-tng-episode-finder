@@ -1,5 +1,3 @@
-
-
 export function SelectedButton({ selectedButtonName }) {
 	return (
 		<div className="selected-button">
