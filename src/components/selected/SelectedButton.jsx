@@ -1,10 +1,8 @@
 
 
-export function SelectedButton({ selectedButtonName, index }) {
+export function SelectedButton({ selectedButtonName }) {
 	return (
-		<div 
-			className="selected-button"
-			key={index}>
+		<div className="selected-button">
 			{selectedButtonName}
 				<button
 					className="remove-button">

@@ -2,7 +2,7 @@ import { SearchTabList } from "./SearchTabList"
 import { SearchButtonList } from "./SearchButtonList"
 import './SearchContent.css'
 
-export function SearchContent({ tabList, selectedTab, setSelectedTab, searchButtonList, onButtonClick }) {
+export function SearchContent({ tabList, selectedTab, setSelectedTab, selectedTabSearchButtonList, onButtonClick }) {
 
 	return (
 		<>
@@ -13,7 +13,8 @@ export function SearchContent({ tabList, selectedTab, setSelectedTab, searchButt
 			/>
 
 			<SearchButtonList 
-				searchButtonList={searchButtonList}
+				selectedTabSearchButtonList={selectedTabSearchButtonList}
+				selectedTab={selectedTab} // sending this to make a better key for the searchButtonList
 				onButtonClick={onButtonClick} 
 			/>
 		</>

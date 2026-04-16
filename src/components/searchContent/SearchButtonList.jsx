@@ -1,14 +1,15 @@
-export function SearchButtonList({ searchButtonList, onButtonClick }) {
+import { SearchButton } from "./SearchButton"
+
+export function SearchButtonList({ selectedTabSearchButtonList, selectedTab, onButtonClick }) {
 	return (
 		<div className="search-button-list">
-			{searchButtonList.map((buttonName) => (
-				<button 
-					key={buttonName} 
+			{selectedTabSearchButtonList.map((buttonName) => (
+				<SearchButton 
+					key={`${buttonName}-${selectedTab}`}
+					buttonName={buttonName}
 					className="search-button"
-					onClick={() => onButtonClick(buttonName)}
-				>
-					{buttonName}
-				</button>
+					onButtonClick={onButtonClick}
+				/>
 			))}
 		</div>
 	)

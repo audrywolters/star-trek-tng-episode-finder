@@ -1,17 +1,17 @@
 import { SelectedButton } from './SelectedButton'
 import './Selected.css'
 
-export function SelectedList({ selectedButtonList }) {
+export function SelectedButtonList({ selectedButtonList }) {
 
 	return (
 		<div className="selected-list">
 			<h2>Selected</h2>
-
+			
 			{selectedButtonList.length > 0 ? (
-				selectedButtonList.map((item) => (
+				selectedButtonList.map((button) => (
 					<SelectedButton
-						key={`${item.type}-${item.name}`}
-						selectedButtonName={item.name}
+						key={`${button.name}-${button.backendTable}`}
+						selectedButtonName={button.name}
 					/>
 				))
 			) : (

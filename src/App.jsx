@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Header } from './components/Header'
 import { SearchContent } from './components/searchContent/SearchContent'
-import { SelectedList } from './components/selected/SelectedList'
+import { SelectedButtonList } from './components/selected/SelectedButtonList'
 import { EpisodeList } from './components/episode/EpisodeList'
 import './App.css'
 
@@ -22,7 +22,7 @@ function App() {
 
   // tracks which tab is currently selected (it is set in SearchTabList.jsx)
 	const [selectedTab, setSelectedTab] = useState('Character')
-  
+
   // collects all the search buttons clicked 
   // and keeps the tabname/backend table name tied to it
 	const [selectedButtonList, setSelectedButtonList] = useState([])
@@ -32,6 +32,8 @@ function App() {
 
   // grabs all the data linked to the selected tab
   // like tabName, backendTable, searchButtonNameList
+  // so we can keep track of all the data that is related to eachother
+  // like tab to buttons relationship and for backend queries
 	const selectedTabData = searchData.find(
 		(data) => data.tabName === selectedTab
 	)
@@ -80,12 +82,12 @@ function App() {
 				tabList={tabNameList}
 				selectedTab={selectedTab} // state
 				setSelectedTab={setSelectedTab} // state
-				searchButtonList={selectedTabSearchButtonList}
+				selectedTabSearchButtonList={selectedTabSearchButtonList}
 				onButtonClick={handleSearchButtonClick}
 			/> 
 
 			<div className="split-screen">
-				<SelectedList 
+				<SelectedButtonList 
           selectedButtonList={selectedButtonList} // state
         />
 				<EpisodeList />
