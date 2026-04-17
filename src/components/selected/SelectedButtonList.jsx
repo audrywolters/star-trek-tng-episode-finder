@@ -1,7 +1,7 @@
 import { SelectedButton } from './SelectedButton'
-import './Selected.css'
+import './SelectedButtonList.css'
 
-export function SelectedButtonList({ selectedButtonList }) {
+export function SelectedButtonList({ selectedButtonList, onClickRemove }) {
 
 	return (
 		<div className="selected-list">
@@ -12,6 +12,8 @@ export function SelectedButtonList({ selectedButtonList }) {
 					<SelectedButton
 						key={`${button.name}-${button.backendTable}`}
 						selectedButtonName={button.name}
+						backendTable={button.backendTable}
+						onClickRemove={onClickRemove}
 					/>
 				))
 			) : (
