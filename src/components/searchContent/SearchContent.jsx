@@ -14,7 +14,6 @@ export function SearchContent({ tabList, selectedTab, setSelectedTab, selectedTa
 
 			<SearchButtonList 
 				selectedTabSearchButtonList={selectedTabSearchButtonList}
-				selectedTab={selectedTab} // sending this to make a better key for the searchButtonList
 				onButtonClick={onButtonClick} 
 			/>
 		</>

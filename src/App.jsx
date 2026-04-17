@@ -12,12 +12,18 @@ function App() {
 		{
 			tabName: 'Character',
 			backendTable: 'characters',
-			searchButtonNameList: ['Picard', 'Crusher']
+			searchButtonList: [
+        { id: 1, name: 'Picard' },
+        { id: 2, name: 'Crusher' }
+      ]
 		},
 		{
 			tabName: 'Genre',
 			backendTable: 'genres',
-			searchButtonNameList: ['Action', 'Problem Solving']
+			searchButtonList: [
+        { id: 1, name: 'Action' }, 
+        { id: 2, name: 'Problem Solving'}
+      ]
 		}
 	]
 
@@ -41,7 +47,7 @@ function App() {
 
 	// by the selcted tab, display the buttons that are under the tab category
 	const selectedTabSearchButtonList =
-		selectedTabData?.searchButtonNameList || []
+		selectedTabData?.searchButtonList || []
 
 	// click a search button
 	const handleSearchButtonClick = (searchButtonName) => {
