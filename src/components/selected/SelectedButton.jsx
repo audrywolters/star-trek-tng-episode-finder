@@ -1,10 +1,10 @@
-export function SelectedButton({ selectedButtonName, onClickRemove, backendTable }) {
+export function SelectedButton({ button, onClickRemove }) {
 	return (
 		<div className="selected-button">
-			{selectedButtonName}
+			{button.name}
 				<button
 					className="remove-button"
-					onClick={() => onClickRemove(selectedButtonName, backendTable)}
+					onClick={() => onClickRemove(button.id, button.backendTable)}
 				>
 						X
 				</button>

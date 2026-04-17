@@ -6,7 +6,7 @@ export function SearchButtonList({ selectedTabSearchButtonList, onButtonClick })
 			{selectedTabSearchButtonList.map((button) => (
 				<SearchButton 
 					key={`${button.id}-${button.name}`}
-					buttonName={button.name}
+					button={button}
 					className="search-button"
 					onButtonClick={onButtonClick}
 				/>

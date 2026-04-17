@@ -1,10 +1,10 @@
-export function SearchButton({ buttonName, onButtonClick}) {
+export function SearchButton({ button, onButtonClick}) {
 	return (
 		<button
 			className="search-button"
-			onClick={() => onButtonClick(buttonName)}
+			onClick={() => onButtonClick(button)}
 		>
-			{buttonName}
+			{button.name}
 		</button>
 	)
 }

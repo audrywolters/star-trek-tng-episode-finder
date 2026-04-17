@@ -13,17 +13,17 @@ function App() {
 			tabName: 'Character',
 			backendTable: 'characters',
 			searchButtonList: [
-        { id: 1, name: 'Picard' },
-        { id: 2, name: 'Crusher' }
-      ]
+				{ id: 1, name: 'Picard' },
+				{ id: 2, name: 'Crusher' }
+			]
 		},
 		{
 			tabName: 'Genre',
 			backendTable: 'genres',
 			searchButtonList: [
-        { id: 1, name: 'Action' }, 
-        { id: 2, name: 'Problem Solving'}
-      ]
+				{ id: 1, name: 'Action' },
+				{ id: 2, name: 'Problem Solving' }
+			]
 		}
 	]
 
@@ -46,11 +46,10 @@ function App() {
 	)
 
 	// by the selcted tab, display the buttons that are under the tab category
-	const selectedTabSearchButtonList =
-		selectedTabData?.searchButtonList || []
+	const selectedTabSearchButtonList = selectedTabData?.searchButtonList || []
 
 	// click a search button
-	const handleSearchButtonClick = (searchButtonName) => {
+	const handleSearchButtonClick = (searchButton) => {
 		const selectedBackendTable = selectedTabData?.backendTable
 
 		// backout if there is no table/category/tabName
@@ -64,7 +63,7 @@ function App() {
 			// check for duplicates
 			const alreadyExists = prev.some(
 				(item) =>
-					item.name === searchButtonName &&
+					item.name === searchButton.id &&
 					item.backendTable === selectedBackendTable
 			)
 
@@ -75,20 +74,24 @@ function App() {
 			// and form the object so we may track the data for the DB
 			return [
 				...prev,
-				{ name: searchButtonName, backendTable: selectedBackendTable }
+				{ 
+					id: searchButton.id,
+					name: searchButton.name,
+					backendTable: selectedBackendTable
+				}
 			]
 		})
 	}
 
 	// the selectedButton that was clicked to be removed
-	// will pass it's name and backend table data
+	// will pass it's ID and backend table data
 	// if the data doesn't match other buttons, they will be kept
 	// if it matches, it will be removed
-	const handleRemoveSelectedButton = (name, backendTable) => {
+	const handleRemoveSelectedButton = (id, backendTable) => {
 		setSelectedButtonList((prev) => {
 			return prev.filter(
 				(selectedButton) =>
-					selectedButton.name !== name ||
+					selectedButton.id !== id ||
 					selectedButton.backendTable !== backendTable
 			)
 		})

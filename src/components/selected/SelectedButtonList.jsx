@@ -10,8 +10,7 @@ export function SelectedButtonList({ selectedButtonList, onClickRemove }) {
 				selectedButtonList.map((button) => (
 					<SelectedButton
 						key={`${button.id}-${button.name}`}
-						selectedButtonName={button.name}
-						backendTable={button.backendTable}
+						button={button}
 						onClickRemove={onClickRemove}
 					/>
 				))
