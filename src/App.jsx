@@ -63,12 +63,18 @@ function App() {
 			// check for duplicates
 			const alreadyExists = prev.some(
 				(item) =>
-					item.name === searchButton.id &&
+					item.name === searchButton.name &&
 					item.backendTable === selectedBackendTable
 			)
 
-			// don't allow a duplicate button
-			if (alreadyExists) return prev
+			// toggle selecte/not selected for SearchButton
+			if (alreadyExists) {
+				return prev.filter(
+					(item) =>
+						item.name !== searchButton.name ||
+					item.backendTable !== selectedBackendTable
+				)
+			}
 
 			// if not already selected, add to state
 			// and form the object so we may track the data for the DB
@@ -111,7 +117,8 @@ function App() {
 				selectedTab={selectedTab} // state
 				setSelectedTab={setSelectedTab} // state
 				selectedTabSearchButtonList={selectedTabSearchButtonList}
-				selectedButtonList={selectedButtonList} // to disable already selected search buttons
+				selectedButtonList={selectedButtonList} // to show if a search button is selected
+				backendTable={selectedTabData?.backendTable} // to show if a search button is selected
 				onButtonClick={handleSearchButtonClick}
 			/>
 

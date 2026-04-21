@@ -7,7 +7,8 @@ export function SearchContent({
 	selectedTab, 
 	setSelectedTab, 
 	selectedTabSearchButtonList, 
-	selectedButtonList, // to disable already selected search buttons
+	selectedButtonList, // to show if a search button is selected
+	backendTable, // to show if a search button is selected
 	onButtonClick 
 }) {
 
@@ -21,7 +22,8 @@ export function SearchContent({
 
 			<SearchButtonList 
 				selectedTabSearchButtonList={selectedTabSearchButtonList}
-				selectedButtonList={selectedButtonList} // to disable already selected search buttons
+				selectedButtonList={selectedButtonList} // to show if a search button is selected
+				backendTable={backendTable} // to show if a search button is selected
 				onButtonClick={onButtonClick} 
 			/>
 		</>
