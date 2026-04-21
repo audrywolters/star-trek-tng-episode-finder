@@ -111,6 +111,7 @@ function App() {
 				selectedTab={selectedTab} // state
 				setSelectedTab={setSelectedTab} // state
 				selectedTabSearchButtonList={selectedTabSearchButtonList}
+				selectedButtonList={selectedButtonList} // to disable already selected search buttons
 				onButtonClick={handleSearchButtonClick}
 			/>
 

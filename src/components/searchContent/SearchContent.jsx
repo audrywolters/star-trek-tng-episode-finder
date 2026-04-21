@@ -2,7 +2,14 @@ import { SearchTabList } from "./SearchTabList"
 import { SearchButtonList } from "./SearchButtonList"
 import './SearchContent.css'
 
-export function SearchContent({ tabList, selectedTab, setSelectedTab, selectedTabSearchButtonList, onButtonClick }) {
+export function SearchContent({ 
+	tabList, 
+	selectedTab, 
+	setSelectedTab, 
+	selectedTabSearchButtonList, 
+	selectedButtonList, // to disable already selected search buttons
+	onButtonClick 
+}) {
 
 	return (
 		<>
@@ -14,6 +21,7 @@ export function SearchContent({ tabList, selectedTab, setSelectedTab, selectedTa
 
 			<SearchButtonList 
 				selectedTabSearchButtonList={selectedTabSearchButtonList}
+				selectedButtonList={selectedButtonList} // to disable already selected search buttons
 				onButtonClick={onButtonClick} 
 			/>
 		</>
