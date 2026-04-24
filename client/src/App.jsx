@@ -34,6 +34,9 @@ function App() {
 	// and keeps the tabname/backend table name tied to it
 	const [selectedButtonList, setSelectedButtonList] = useState([])
 
+	// the filtered episodes fetched from the backend
+	const [episodeList, setEpisodeList] = useState([])
+
 	// find all the tab names from the backend
 	const tabNameList = searchData.map((data) => data.tabName)
 
@@ -103,8 +106,26 @@ function App() {
 		})
 	}
 
-	// for testing only
+	// fetch the episodes that match the selected SearchButtons
 	useEffect(() => {
+		async function fetchFilteredEpisodeList() {
+			try {
+				const result = await fetch('http://localhost:5000/api/episodes/search', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(selectedButtonList)
+				})
+
+				const data = await result.json()
+				setEpisodeList(data)
+			} catch (error) {
+				console.error(error)
+			}
+		}
+
+		fetchFilteredEpisodeList()
+
+		// for testing
 		console.log(selectedButtonList)
 	}, [selectedButtonList])
 
@@ -127,7 +148,11 @@ function App() {
 					selectedButtonList={selectedButtonList} // state
 					onClickRemove={handleRemoveSelectedButton}
 				/>
-				<EpisodeList />
+
+				<EpisodeList 
+					episodeList={episodeList} 
+					selectedButtonList={selectedButtonList} 
+				/>
 			</div>
 		</div>
 	)
