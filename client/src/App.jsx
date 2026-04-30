@@ -150,8 +150,8 @@ function App() {
 				/>
 
 				<EpisodeList 
-					episodeList={episodeList} 
-					selectedButtonList={selectedButtonList} 
+					episodeList={episodeList} // state
+					selectedButtonList={selectedButtonList} // state
 				/>
 			</div>
 		</div>

@@ -1,0 +1,21 @@
+namespace StarTrekTNGApi.Data;
+
+using Npgsql;
+using System.Data;
+
+public class DbConnectionFactory
+{
+    private readonly string _connectionString;
+
+	public DbConnectionFactory(IConfiguration config)
+	{
+		_connectionString =
+			config.GetConnectionString("DefaultConnection")
+			?? throw new InvalidOperationException("Missing connection string: DefaultConnection");
+	}
+
+    public IDbConnection CreateConnection()
+    {
+        return new NpgsqlConnection(_connectionString);
+    }
+}
