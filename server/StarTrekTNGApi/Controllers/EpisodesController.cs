@@ -17,12 +17,21 @@ public class EpisodesController : ControllerBase
     [HttpPost("search")]
     public async Task<IActionResult> Search([FromBody] List<FilterItem> filters)
     {
-        using var connection = _factory.CreateConnection();
+        try
+        {
+            using var connection = _factory.CreateConnection();
 
-        var sql = "SELECT * FROM episodes";
+            var sql = "SELECT * FROM episodes";
 
-        var result = await connection.QueryAsync<Episode>(sql);
+            var result = await connection.QueryAsync<Episode>(sql);
 
-        return Ok(result);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex); // shows error in terminal
+            return StatusCode(500, ex.Message); // sends readable error to React
+        }
+
     }
 }

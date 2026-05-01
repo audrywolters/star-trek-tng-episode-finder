@@ -56,3 +56,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+app.Urls.Add("http://localhost:5000");
+
+Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));

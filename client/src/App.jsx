@@ -116,6 +116,12 @@ function App() {
 					body: JSON.stringify(selectedButtonList)
 				})
 
+				if (!result.ok) {
+					const text = await result.text()
+					console.error("Backend error: ", text)
+					return
+				}
+				
 				const data = await result.json()
 				setEpisodeList(data)
 			} catch (error) {
@@ -124,9 +130,6 @@ function App() {
 		}
 
 		fetchFilteredEpisodeList()
-
-		// for testing
-		console.log(selectedButtonList)
 	}, [selectedButtonList])
 
 	return (
@@ -148,10 +151,9 @@ function App() {
 					selectedButtonList={selectedButtonList} // state
 					onClickRemove={handleRemoveSelectedButton}
 				/>
-
 				<EpisodeList 
-					episodeList={episodeList} // state
-					selectedButtonList={selectedButtonList} // state
+					episodeList={episodeList}
+					selectedButtonList={selectedButtonList}
 				/>
 			</div>
 		</div>
