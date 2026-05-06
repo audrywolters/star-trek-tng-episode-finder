@@ -75,7 +75,7 @@ function App() {
 				return prev.filter(
 					(item) =>
 						item.name !== searchButton.name ||
-					item.backendTable !== selectedBackendTable
+						item.backendTable !== selectedBackendTable
 				)
 			}
 
@@ -86,7 +86,7 @@ function App() {
 				{ 
 					id: searchButton.id,
 					name: searchButton.name,
-					backendTable: selectedBackendTable
+					type: selectedBackendTable.tabName
 				}
 			]
 		})
@@ -96,12 +96,12 @@ function App() {
 	// will pass it's ID and backend table data
 	// if the data doesn't match other buttons, they will be kept
 	// if it matches, it will be removed
-	const handleRemoveSelectedButton = (id, backendTable) => {
+	const handleRemoveSelectedButton = (id, type) => {
 		setSelectedButtonList((prev) => {
 			return prev.filter(
 				(selectedButton) =>
 					selectedButton.id !== id ||
-					selectedButton.backendTable !== backendTable
+					selectedButton.type !== type
 			)
 		})
 	}
@@ -113,7 +113,9 @@ function App() {
 				const result = await fetch('http://localhost:5000/api/episodes/search', {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify(selectedButtonList)
+					body: JSON.stringify({
+						filters: selectedButtonList
+					})
 				})
 
 				if (!result.ok) {

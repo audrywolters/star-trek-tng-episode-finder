@@ -15,7 +15,7 @@ public class EpisodesController : ControllerBase
     }
 
     [HttpPost("search")]
-    public async Task<IActionResult> Search([FromBody] List<FilterItem> filters)
+    public async Task<IActionResult> Search([FromBody] FilterRequest request)
     {
         try
         {
