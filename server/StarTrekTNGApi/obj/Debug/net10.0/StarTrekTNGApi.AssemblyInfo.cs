@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("StarTrekTNGApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1a9b949a68b750d70722e02360f6bec5be7df5d6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+49de0d843426569b1ed5eced6eb85af838d638a3")]
 [assembly: System.Reflection.AssemblyProductAttribute("StarTrekTNGApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("StarTrekTNGApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

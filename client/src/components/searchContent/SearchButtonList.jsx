@@ -3,7 +3,7 @@ import { SearchButton } from "./SearchButton"
 export function SearchButtonList({ 
 	selectedTabSearchButtonList, 
 	selectedButtonList, // to show if a search button is selected
-	backendTable, // to show if a search button is selected
+	tabName, // to show if a search button is selected
 	onButtonClick 
 }) {
 	return (
@@ -15,7 +15,7 @@ export function SearchButtonList({
 					className="search-button"
 					isSelected={selectedButtonList.some(
 						(item) => item.name === button.name &&
-						item.backendTable === backendTable
+						item.filterType === tabName
 					)}
 					onButtonClick={onButtonClick}
 				/>

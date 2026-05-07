@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Header } from './components/Header'
 import { SearchContent } from './components/searchContent/SearchContent'
 import { SelectedButtonList } from './components/selected/SelectedButtonList'
@@ -11,7 +11,7 @@ function App() {
 	const searchData = [
 		{
 			tabName: 'Character',
-			backendTable: 'characters',
+			backendTable: 'Character',
 			searchButtonList: [
 				{ id: 1, name: 'Picard' },
 				{ id: 2, name: 'Crusher' }
@@ -19,7 +19,7 @@ function App() {
 		},
 		{
 			tabName: 'Genre',
-			backendTable: 'genres',
+			backendTable: 'Genre',
 			searchButtonList: [
 				{ id: 1, name: 'Action' },
 				{ id: 2, name: 'Problem Solving' }
@@ -32,7 +32,7 @@ function App() {
 
 	// collects all the search buttons clicked
 	// and keeps the tabname/backend table name tied to it
-	const [selectedButtonList, setSelectedButtonList] = useState([])
+	const [selectedButtonList, setSelectedButtonList] = useState({})
 
 	// the filtered episodes fetched from the backend
 	const [episodeList, setEpisodeList] = useState([])
@@ -41,7 +41,7 @@ function App() {
 	const tabNameList = searchData.map((data) => data.tabName)
 
 	// grabs all the data linked to the selected tab
-	// like tabName, backendTable, searchButtonNameList
+	// like tabName, earchButtonNameList
 	// so we can keep track of all the data that is related to eachother
 	// like tab to buttons relationship and for backend queries
 	const selectedTabData = searchData.find(
@@ -51,44 +51,39 @@ function App() {
 	// by the selcted tab, display the buttons that are under the tab category
 	const selectedTabSearchButtonList = selectedTabData?.searchButtonList || []
 
+	const buildFlatButtonList = (selectedButtons) => {
+		return Object.entries(selectedButtons).flatMap(([tabName, items]) =>
+			items.map((item) => ({
+				id: item.id,
+				name: item.name,
+				filterType: tabName
+			}))
+		)
+	}
+
+	// reuse the same array unless selectedButtonList changes
+	const flatSelectedButtons = useMemo(() => {
+		return buildFlatButtonList(selectedButtonList)
+	}, [selectedButtonList])
+
 	// click a search button
 	const handleSearchButtonClick = (searchButton) => {
-		const selectedBackendTable = selectedTabData?.backendTable
+		const tabName = selectedTabData?.tabName
+		if (!tabName) return
 
-		// backout if there is no table/category/tabName
-		if (!selectedBackendTable) return
-
-		// update state
-		// this state will be an object with the button name and it's tab category along with it
-		// we will need to tie the 2 together so we can query the DB
-		// while maintaining the order the buttons have been clicked
 		setSelectedButtonList((prev) => {
-			// check for duplicates
-			const alreadyExists = prev.some(
-				(item) =>
-					item.name === searchButton.name &&
-					item.backendTable === selectedBackendTable
-			)
+			const current = prev[tabName] || []
 
-			// toggle selecte/not selected for SearchButton
-			if (alreadyExists) {
-				return prev.filter(
-					(item) =>
-						item.name !== searchButton.name ||
-						item.backendTable !== selectedBackendTable
-				)
-			}
+			const exists = current.some((item) => item.id === searchButton.id)
 
-			// if not already selected, add to state
-			// and form the object so we may track the data for the DB
-			return [
+			const updated = exists
+				? current.filter((item) => item.id !== searchButton.id)
+				: [...current, { id: searchButton.id, name: searchButton.name }]
+
+			return {
 				...prev,
-				{ 
-					id: searchButton.id,
-					name: searchButton.name,
-					type: selectedBackendTable.tabName
-				}
-			]
+				[tabName]: updated
+			}
 		})
 	}
 
@@ -96,13 +91,17 @@ function App() {
 	// will pass it's ID and backend table data
 	// if the data doesn't match other buttons, they will be kept
 	// if it matches, it will be removed
-	const handleRemoveSelectedButton = (id, type) => {
+	const handleRemoveSelectedButton = (id, tabName) => {
+
 		setSelectedButtonList((prev) => {
-			return prev.filter(
-				(selectedButton) =>
-					selectedButton.id !== id ||
-					selectedButton.type !== type
-			)
+			const current = prev[tabName] || []
+
+			const updatedSelectedButtons = current.filter((item) => item.id !== id)
+
+			return {
+				...prev,
+				[tabName]: updatedSelectedButtons
+			}
 		})
 	}
 
@@ -110,12 +109,11 @@ function App() {
 	useEffect(() => {
 		async function fetchFilteredEpisodeList() {
 			try {
+
 				const result = await fetch('http://localhost:5000/api/episodes/search', {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({
-						filters: selectedButtonList
-					})
+					body: JSON.stringify(flatSelectedButtons)
 				})
 
 				if (!result.ok) {
@@ -132,7 +130,7 @@ function App() {
 		}
 
 		fetchFilteredEpisodeList()
-	}, [selectedButtonList])
+	}, [flatSelectedButtons])
 
 	return (
 		<div className="grid-parent">
@@ -143,19 +141,19 @@ function App() {
 				selectedTab={selectedTab} // state
 				setSelectedTab={setSelectedTab} // state
 				selectedTabSearchButtonList={selectedTabSearchButtonList}
-				selectedButtonList={selectedButtonList} // to show if a search button is selected
-				backendTable={selectedTabData?.backendTable} // to show if a search button is selected
+				selectedButtonList={flatSelectedButtons} // to show if a search button is selected
+				tabName={selectedTabData?.tabName} // to show if a search button is selected
 				onButtonClick={handleSearchButtonClick}
 			/>
 
 			<div className="split-screen">
 				<SelectedButtonList
-					selectedButtonList={selectedButtonList} // state
+					selectedButtonList={flatSelectedButtons} // state
 					onClickRemove={handleRemoveSelectedButton}
 				/>
 				<EpisodeList 
 					episodeList={episodeList}
-					selectedButtonList={selectedButtonList}
+					selectedButtonList={flatSelectedButtons}
 				/>
 			</div>
 		</div>

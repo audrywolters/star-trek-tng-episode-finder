@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Dapper;
 using StarTrekTNGApi.Data;
 using StarTrekTNGApi.Models;
+using StarTrekTNGApi.Models.DTOs;
 
 [ApiController]
 [Route("api/[controller]")]
+
 public class EpisodesController : ControllerBase
 {
     private readonly DbConnectionFactory _factory;
@@ -15,7 +17,7 @@ public class EpisodesController : ControllerBase
     }
 
     [HttpPost("search")]
-    public async Task<IActionResult> Search([FromBody] FilterRequest request)
+    public async Task<IActionResult> Search([FromBody] List<FilterItemDto> filters)
     {
         try
         {

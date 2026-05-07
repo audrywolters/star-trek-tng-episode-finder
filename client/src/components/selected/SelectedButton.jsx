@@ -4,7 +4,7 @@ export function SelectedButton({ button, onClickRemove }) {
 			{button.name}
 				<button
 					className="remove-button"
-					onClick={() => onClickRemove(button.id, button.backendTable)}
+					onClick={() => onClickRemove(button.id, button.filterType)}
 				>
 						X
 				</button>
