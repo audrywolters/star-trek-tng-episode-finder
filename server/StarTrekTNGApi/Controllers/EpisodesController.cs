@@ -3,6 +3,7 @@ using Dapper;
 using StarTrekTNGApi.Data;
 using StarTrekTNGApi.Models;
 using StarTrekTNGApi.Models.DTOs;
+using StarTrekTNGApi.Models.Enums;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -23,17 +24,36 @@ public class EpisodesController : ControllerBase
         {
             using var connection = _factory.CreateConnection();
 
-            var sql = "SELECT * FROM episodes";
+            var characterIds = filters
+                .Where(f => f.FilterType == FilterType.Character)
+                .Select(f => f.Id)
+                .ToArray();
 
-            var result = await connection.QueryAsync<Episode>(sql);
+            var genreIds = filters
+                .Where(f => f.FilterType == FilterType.Genre)
+                .Select(f => f.Id)
+                .ToArray();
+
+            var sql = @"
+                SELECT *
+                FROM search_episodes(@CharacterIds, @GenreIds)
+            ";
+
+            var result = await connection.QueryAsync<Episode>(
+                sql,
+                new
+                {
+                    CharacterIds = characterIds.Length > 0 ? characterIds : null,
+                    GenreIds = genreIds.Length > 0 ? genreIds : null
+                }
+            );
 
             return Ok(result);
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex); // shows error in terminal
-            return StatusCode(500, ex.Message); // sends readable error to React
+            Console.WriteLine(ex);
+            return StatusCode(500, ex.Message);
         }
-
     }
 }
