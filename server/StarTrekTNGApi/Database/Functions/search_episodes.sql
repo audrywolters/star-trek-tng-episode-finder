@@ -12,9 +12,14 @@ RETURNS TABLE (
 )
 LANGUAGE sql
 AS $$
-    SELECT e.*
+    SELECT
+        e.id,
+        e.season,
+        e.episode_number,
+        e.title,
+        e.description,
+        e.image_url
     FROM episodes e
-
     WHERE (
         character_ids IS NULL
         OR e.id IN (
@@ -25,7 +30,6 @@ AS $$
             HAVING COUNT(DISTINCT ec.character_id) = array_length(character_ids, 1)
         )
     )
-
     AND (
         genre_ids IS NULL
         OR e.id IN (

@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Dapper;
 using StarTrekTNGApi.Data;
-using StarTrekTNGApi.Models;
 using StarTrekTNGApi.Models.DTOs;
 using StarTrekTNGApi.Models.Enums;
 
+namespace StarTrekTNGApi.Controllers;
+
 [ApiController]
 [Route("api/[controller]")]
-
 public class EpisodesController : ControllerBase
 {
     private readonly DbConnectionFactory _factory;
@@ -35,25 +35,32 @@ public class EpisodesController : ControllerBase
                 .ToArray();
 
             var sql = @"
-                SELECT *
-                FROM search_episodes(@CharacterIds, @GenreIds)
+                SELECT
+                    id,
+                    season,
+                    episode_number AS ""EpisodeNumber"",
+                    title,
+                    description,
+                    image_url AS ""ImageUrl""
+                FROM search_episodes(@character_ids, @genre_ids);
             ";
 
-            var result = await connection.QueryAsync<Episode>(
-                sql,
-                new
-                {
-                    CharacterIds = characterIds.Length > 0 ? characterIds : null,
-                    GenreIds = genreIds.Length > 0 ? genreIds : null
-                }
-            );
+            var result = await connection.QueryAsync<EpisodeDto>(sql, new
+            {
+                character_ids = characterIds.Length == 0 ? null : characterIds,
+                genre_ids = genreIds.Length == 0 ? null : genreIds
+            });
 
             return Ok(result);
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
-            return StatusCode(500, ex.Message);
+            Console.WriteLine(ex.Message);
+            return StatusCode(500, new
+            {
+                error = "Something went wrong while fetching episodes",
+                details = ex.Message
+            });
         }
     }
 }

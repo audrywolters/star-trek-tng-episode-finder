@@ -123,6 +123,7 @@ function App() {
 				}
 				
 				const data = await result.json()
+
 				setEpisodeList(data)
 			} catch (error) {
 				console.error(error)

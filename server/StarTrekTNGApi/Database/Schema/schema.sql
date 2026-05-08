@@ -28,3 +28,8 @@ CREATE TABLE episode_genres (
 	genre_id INT NOT NULL REFERENCES genres(id) ON DELETE CASCADE,
 	PRIMARY KEY (episode_id, genre_id)
 )
+
+select * from episodes
+
+SELECT *
+FROM search_episodes(NULL, NULL);

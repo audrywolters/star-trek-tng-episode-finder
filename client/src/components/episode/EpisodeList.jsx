@@ -14,7 +14,7 @@ export function EpisodeList({ episodeList, selectedButtonList }) {
 				episodeList.map((episode) => (
 					<div key={episode.id}>
 						<h2>{episode.title}</h2>
-						<h3>Season {episode.season} Episode {episode.episode_Number}</h3>
+						<h3>Season {episode.season} Episode {episode.episodeNumber}</h3>
 						<p>{episode.description}</p>
 					</div>
 				))
