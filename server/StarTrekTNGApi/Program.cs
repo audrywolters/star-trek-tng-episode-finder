@@ -1,5 +1,6 @@
 using StarTrekTNGApi.Data;
 using System.Text.Json.Serialization;
+using StarTrekTNGApi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +38,11 @@ builder.Services.AddCors(options =>
 //
 builder.Services.AddSingleton<DbConnectionFactory>();
 
+//
+// 📦 REPOSITORIES
+//
+builder.Services.AddScoped<IEpisodeRepository, EpisodeRepository>();
+
 var app = builder.Build();
 
 //
@@ -60,8 +66,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
-
 app.Urls.Add("http://localhost:5000");
+
+app.Run();
 
 Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
