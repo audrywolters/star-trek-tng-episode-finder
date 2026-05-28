@@ -41,6 +41,7 @@ builder.Services.AddSingleton<DbConnectionFactory>();
 //
 // 📦 REPOSITORIES
 //
+builder.Services.AddScoped<IFilterRepository, FilterRepository>();
 builder.Services.AddScoped<IEpisodeRepository, EpisodeRepository>();
 
 var app = builder.Build();

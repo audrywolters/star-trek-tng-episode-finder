@@ -6,58 +6,73 @@ import { EpisodeList } from './components/episode/EpisodeList'
 import './App.css'
 
 function App() {
-	// mock data that would be coming from backend
-	// it is structured data that is all the stuff used to search for an episode
-	const searchData = [
-		{
-			tabName: 'Character',
-			backendTable: 'Character',
-			searchButtonList: [
-				{ id: 1, name: 'Picard' },
-				{ id: 2, name: 'Crusher' }
-			]
-		},
-		{
-			tabName: 'Genre',
-			backendTable: 'Genre',
-			searchButtonList: [
-				{ id: 1, name: 'Action' },
-				{ id: 2, name: 'Problem Solving' }
-			]
-		}
-	]
+
+	// hold the tab and button names from the backend
+	const [searchData, setSearchData] = useState([])
 
 	// tracks which tab is currently selected (it is set in SearchTabList.jsx)
 	const [selectedTab, setSelectedTab] = useState('Character')
 
 	// collects all the search buttons clicked
-	// and keeps the tabname/backend table name tied to it
+	// and keeps the tabname tied to it
 	const [selectedButtonList, setSelectedButtonList] = useState({})
 
 	// the filtered episodes fetched from the backend
 	const [episodeList, setEpisodeList] = useState([])
 
-	// find all the tab names from the backend
+	// get all the tab and button data from backend
+	useEffect(() => {
+		async function fetchFilters() {
+			try {
+				const result = await fetch('http://localhost:5000/api/filters')
+
+				if (!result.ok) {
+					throw new Error('Failed to fetch filters')
+				}
+
+				const data = await result.json()
+
+				// update the data names for easier reading on the frontend
+				const formattedData = data.map((item) => ({
+					tabName: item.name,
+					searchButtons: item.rows
+				}))
+
+				setSearchData(formattedData)
+
+				// set first tab automatically
+				if (formattedData.length > 0) {
+					setSelectedTab(formattedData[0].tabName)
+				}
+
+			} catch (error) {
+				console.error(error)
+			}
+		}
+
+		fetchFilters()
+	}, [])
+
+	// set all the tab names
 	const tabNameList = searchData.map((data) => data.tabName)
 
-	// grabs all the data linked to the selected tab
-	// like tabName, earchButtonNameList
-	// so we can keep track of all the data that is related to eachother
-	// like tab to buttons relationship and for backend queries
+	// keep track of what tab is selected
 	const selectedTabData = searchData.find(
 		(data) => data.tabName === selectedTab
 	)
 
 	// by the selcted tab, display the buttons that are under the tab category
-	const selectedTabSearchButtonList = selectedTabData?.searchButtonList || []
+	const selectedTabSearchButtonList = selectedTabData?.searchButtons || []
 
+	// restructure the data for the backend
 	const buildFlatButtonList = (selectedButtons) => {
-		return Object.entries(selectedButtons).flatMap(([tabName, items]) =>
-			items.map((item) => ({
-				id: item.id,
-				name: item.name,
-				filterType: tabName
-			}))
+		return Object.entries(selectedButtons).flatMap(
+			([tabName, selectedButtonsForTab]) =>
+				selectedButtonsForTab.map((item) => ({
+					id: item.id,
+					name: item.name,
+					filterType: tabName
+				}))
 		)
 	}
 
@@ -66,23 +81,27 @@ function App() {
 		return buildFlatButtonList(selectedButtonList)
 	}, [selectedButtonList])
 
-	// click a search button
+	// handle search button toggle
 	const handleSearchButtonClick = (searchButton) => {
-		const tabName = selectedTabData?.tabName
-		if (!tabName) return
+		// if no tab is selected, get out of here. bad!
+		if (!selectedTab) return
 
+		// update state based on latest previous state
 		setSelectedButtonList((prev) => {
-			const current = prev[tabName] || []
+			// get all the selected buttons
+			const currentTabButtons = prev[selectedTab] ?? []
 
-			const exists = current.some((item) => item.id === searchButton.id)
-
-			const updated = exists
-				? current.filter((item) => item.id !== searchButton.id)
-				: [...current, { id: searchButton.id, name: searchButton.name }]
+			const updatedTabButtons = currentTabButtons.some(b => b.id === searchButton.id)
+				// remove button if already selected (toggle)
+				? currentTabButtons.filter(b => b.id !== searchButton.id)
+				// add bugtton if not already selected (toggle)
+				: [...currentTabButtons, searchButton]
 
 			return {
+				// preserve other tabs' selections
 				...prev,
-				[tabName]: updated
+				// update the selected buttons
+				[selectedTab]: updatedTabButtons
 			}
 		})
 	}
@@ -96,7 +115,9 @@ function App() {
 		setSelectedButtonList((prev) => {
 			const current = prev[tabName] || []
 
-			const updatedSelectedButtons = current.filter((item) => item.id !== id)
+			const updatedSelectedButtons = current.filter(
+				(selectedButton) => selectedButton.id !== id
+			)
 
 			return {
 				...prev,
