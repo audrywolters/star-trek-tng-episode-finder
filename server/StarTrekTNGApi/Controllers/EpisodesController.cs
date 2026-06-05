@@ -27,14 +27,14 @@ public class EpisodesController : ControllerBase
                 .Select(f => f.Id)
                 .ToArray();
 
-            var genreIds = filters
-                .Where(f => f.FilterType == FilterType.Genre)
+            var themeIds = filters
+                .Where(f => f.FilterType == FilterType.Theme)
                 .Select(f => f.Id)
                 .ToArray();
 
             var episodes = await _repository.SearchEpisodes(
                 characterIds.Length == 0 ? null : characterIds,
-                genreIds.Length == 0 ? null : genreIds
+                themeIds.Length == 0 ? null : themeIds
             );
 
             return Ok(episodes);

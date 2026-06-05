@@ -15,7 +15,7 @@ public class EpisodeRepository : IEpisodeRepository
 
     public async Task<IEnumerable<EpisodeDto>> SearchEpisodes(
         int[]? characterIds,
-        int[]? genreIds
+        int[]? themeIds
     )
     {
         using var connection = _factory.CreateConnection();
@@ -28,7 +28,7 @@ public class EpisodeRepository : IEpisodeRepository
                 title,
                 description,
                 image_url AS ""ImageUrl""
-            FROM search_episodes(@character_ids, @genre_ids);
+            FROM search_episodes(@character_ids, @theme_ids);
         ";
 
         var result = await connection.QueryAsync<EpisodeDto>(
@@ -36,7 +36,7 @@ public class EpisodeRepository : IEpisodeRepository
             new
             {
                 character_ids = characterIds,
-                genre_ids = genreIds
+                theme_ids = themeIds
             });
 
         return result;

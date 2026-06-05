@@ -6,6 +6,6 @@ public interface IEpisodeRepository
 {
     Task<IEnumerable<EpisodeDto>> SearchEpisodes(
         int[]? characterIds,
-        int[]? genreIds
+        int[]? themeIds
     );
 }

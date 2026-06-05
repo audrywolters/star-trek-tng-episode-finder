@@ -25,11 +25,11 @@ public class FilterRepository : IFilterRepository
             ORDER BY id;
         ");
 
-        var genres = await connection.QueryAsync<FilterOptionDto>(@"
+        var themes = await connection.QueryAsync<FilterOptionDto>(@"
             SELECT
                 id,
                 name
-            FROM genres
+            FROM themes
             ORDER BY id;
         ");
 
@@ -43,8 +43,8 @@ public class FilterRepository : IFilterRepository
 
             new()
             {
-                Name = "Genre",
-                Rows = genres.ToList()
+                Name = "Theme",
+                Rows = themes.ToList()
             }
         };
 

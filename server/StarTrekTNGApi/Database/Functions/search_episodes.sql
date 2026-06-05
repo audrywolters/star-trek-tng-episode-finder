@@ -1,6 +1,9 @@
+DROP FUNCTION search_episodes(INT[], INT[]);
+
+
 CREATE OR REPLACE FUNCTION search_episodes(
     character_ids INT[],
-    genre_ids INT[]
+    theme_ids INT[]
 )
 RETURNS TABLE (
     id INT,
@@ -31,13 +34,13 @@ AS $$
         )
     )
     AND (
-        genre_ids IS NULL
+        theme_ids IS NULL
         OR e.id IN (
-            SELECT eg.episode_id
-            FROM episode_genres eg
-            WHERE eg.genre_id = ANY(genre_ids)
-            GROUP BY eg.episode_id
-            HAVING COUNT(DISTINCT eg.genre_id) = array_length(genre_ids, 1)
+            SELECT et.episode_id
+            FROM episode_themes et
+            WHERE et.theme_id = ANY(theme_ids)
+            GROUP BY et.episode_id
+            HAVING COUNT(DISTINCT et.theme_id) = array_length(theme_ids, 1)
         )
     );
 $$;

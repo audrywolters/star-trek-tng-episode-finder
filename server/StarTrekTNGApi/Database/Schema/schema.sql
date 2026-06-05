@@ -12,7 +12,7 @@ CREATE TABLE characters (
 	name TEXT NOT NULL UNIQUE
 );
 
-CREATE TABLE genres (
+CREATE TABLE themes (
 	id SERIAL PRIMARY KEY,
 	name TEXT NOT NULL UNIQUE
 );
@@ -23,10 +23,10 @@ CREATE TABLE episode_characters (
 	PRIMARY KEY (episode_id, character_id)
 );
 
-CREATE TABLE episode_genres (
+CREATE TABLE episode_themes (
 	episode_id INT NOT NULL REFERENCES episodes(id) ON DELETE CASCADE,
-	genre_id INT NOT NULL REFERENCES genres(id) ON DELETE CASCADE,
-	PRIMARY KEY (episode_id, genre_id)
+	theme_id INT NOT NULL REFERENCES themes(id) ON DELETE CASCADE,
+	PRIMARY KEY (episode_id, theme_id)
 )
 
 select * from episodes

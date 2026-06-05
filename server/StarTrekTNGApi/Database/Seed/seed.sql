@@ -24,7 +24,7 @@ VALUES
 	('Picard'),
 	('Crusher')
 
-INSERT INTO genres (name)
+INSERT INTO themes (name)
 VALUES
 	('Action'),
 	('Problem Solving')
@@ -36,7 +36,7 @@ VALUES
 (3, 1), -- attached, picard
 (3, 2); -- attached, crusher
 
-INSERT INTO episode_genres (episode_id, genre_id)
+INSERT INTO episode_themes (episode_id, theme_id)
 VALUES
 (1, 1), -- darmok, action
 (1, 2), -- darmok, problem solving
@@ -50,9 +50,9 @@ SELECT * FROM episodes
 
 SELECT * FROM characters
 
-SELECT * FROM genres
+SELECT * FROM themes
 
 SELECT * FROM episode_characters
 
-SELECT * FROM episode_genres
+SELECT * FROM episode_themes
 
