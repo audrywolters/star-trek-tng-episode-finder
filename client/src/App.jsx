@@ -144,10 +144,6 @@ function App() {
 				}
 				
 				const data = await result.json()
-
-				console.log('fetch filtered episodes')
-				console.log(data)
-
 				setEpisodeList(data)
 			} catch (error) {
 				console.error(error)
