@@ -83,7 +83,6 @@ function App() {
 
 	// handle search button toggle
 	const handleSearchButtonClick = (searchButton) => {
-		// if no tab is selected, get out of here. bad!
 		if (!selectedTab) return
 
 		// update state based on latest previous state
@@ -98,18 +97,13 @@ function App() {
 				: [...currentTabButtons, searchButton]
 
 			return {
-				// preserve other tabs' selections
 				...prev,
-				// update the selected buttons
 				[selectedTab]: updatedTabButtons
 			}
 		})
 	}
 
-	// the selectedButton that was clicked to be removed
-	// will pass it's ID and backend table data
-	// if the data doesn't match other buttons, they will be kept
-	// if it matches, it will be removed
+	// update state when user clicks a selected button to remove it from the filters
 	const handleRemoveSelectedButton = (id, tabName) => {
 
 		setSelectedButtonList((prev) => {
@@ -128,6 +122,12 @@ function App() {
 
 	// fetch the episodes that match the selected SearchButtons
 	useEffect(() => {
+
+		// if there are no buttons selected, do not fetch episodes
+		if (flatSelectedButtons.length === 0) {
+			return
+		}
+
 		async function fetchFilteredEpisodeList() {
 			try {
 
@@ -144,6 +144,9 @@ function App() {
 				}
 				
 				const data = await result.json()
+
+				console.log('fetch filtered episodes')
+				console.log(data)
 
 				setEpisodeList(data)
 			} catch (error) {
