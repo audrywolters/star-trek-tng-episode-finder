@@ -2,8 +2,8 @@ import { SearchButton } from "./SearchButton"
 
 export function SearchButtonList({ 
 	selectedTabSearchButtonList, 
-	selectedButtonList, // to show if a search button is selected
-	tabName, // to show if a search button is selected
+	selectedButtonList, // used to determine selected state of buttons (by name + tab)
+	selectedTab,
 	onButtonClick 
 }) {
 	return (
@@ -13,9 +13,8 @@ export function SearchButtonList({
 					key={`${button.id}-${button.name}`}
 					button={button}
 					className="search-button"
-					isSelected={selectedButtonList.some(
-						(item) => item.name === button.name &&
-						item.filterType === tabName
+					isSelected={selectedButtonList[selectedTab]?.some(
+						(item) => item.id === button.id
 					)}
 					onButtonClick={onButtonClick}
 				/>

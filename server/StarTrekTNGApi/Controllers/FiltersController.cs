@@ -15,6 +15,7 @@ public class FiltersController : ControllerBase
     }
 
     [HttpGet]
+    // returns filter categories (tabs) and their selectable filter options (searchButtons)
     public async Task<IActionResult> GetFilters()
     {
         try

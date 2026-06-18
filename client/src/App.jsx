@@ -7,20 +7,20 @@ import './App.css'
 
 function App() {
 
-	// hold the tab and button names from the backend
+	// Holds filter (tab names) categories and their buttons from the backend
 	const [searchData, setSearchData] = useState([])
 
-	// tracks which tab is currently selected (it is set in SearchTabList.jsx)
+	// tracks which tab is currently selected
 	const [selectedTab, setSelectedTab] = useState('Character')
 
-	// collects all the search buttons clicked
-	// and keeps the tabname tied to it
+	// collects all the searchButtons clicked (which makes them become selectedButtons)
+	// grouped by tabName
 	const [selectedButtonList, setSelectedButtonList] = useState({})
 
 	// the filtered episodes fetched from the backend
 	const [episodeList, setEpisodeList] = useState([])
 
-	// get all the tab and button data from backend
+	// fetch all the tab and button data from backend (FilterCategoryDto and its Rows on backend)
 	useEffect(() => {
 		async function fetchFilters() {
 			try {
@@ -32,7 +32,7 @@ function App() {
 
 				const data = await result.json()
 
-				// update the data names for easier reading on the frontend
+				// rename backend properties to match the frontend data structure
 				const formattedData = data.map((item) => ({
 					tabName: item.name,
 					searchButtons: item.rows
@@ -40,7 +40,7 @@ function App() {
 
 				setSearchData(formattedData)
 
-				// set first tab automatically
+				// select first tab
 				if (formattedData.length > 0) {
 					setSelectedTab(formattedData[0].tabName)
 				}
@@ -53,18 +53,18 @@ function App() {
 		fetchFilters()
 	}, [])
 
-	// set all the tab names
+	// create a list of tab names for rendering
 	const tabNameList = searchData.map((data) => data.tabName)
 
-	// keep track of what tab is selected
+	// find the search data object that matches the selected tab
 	const selectedTabData = searchData.find(
 		(data) => data.tabName === selectedTab
 	)
 
-	// by the selcted tab, display the buttons that are under the tab category
+	// get search buttons belonging to the selected tab
 	const selectedTabSearchButtonList = selectedTabData?.searchButtons || []
 
-	// restructure the data for the backend
+	// transform selectedButtons (grouped by tab) into a flat list with filterType for the backend
 	const buildFlatButtonList = (selectedButtons) => {
 		return Object.entries(selectedButtons).flatMap(
 			([tabName, selectedButtonsForTab]) =>
@@ -76,26 +76,26 @@ function App() {
 		)
 	}
 
-	// reuse the same array unless selectedButtonList changes
+	// memoize flattened selected buttons to avoid recalculating on every render
 	const flatSelectedButtons = useMemo(() => {
 		return buildFlatButtonList(selectedButtonList)
 	}, [selectedButtonList])
 
-	// handle search button toggle
+	// toggle selection of a search button for the current tab
 	const handleSearchButtonClick = (searchButton) => {
 		if (!selectedTab) return
 
-		// update state based on latest previous state
+		// update state 
 		setSelectedButtonList((prev) => {
-			// get all the selected buttons
+			// get selected buttons for the currently active tab
 			const currentTabButtons = prev[selectedTab] ?? []
 
+			// toggle button selection: remove if selected, otherwise add
 			const updatedTabButtons = currentTabButtons.some(b => b.id === searchButton.id)
-				// remove button if already selected (toggle)
 				? currentTabButtons.filter(b => b.id !== searchButton.id)
-				// add bugtton if not already selected (toggle)
 				: [...currentTabButtons, searchButton]
 
+			// return updated state with the modified button list for the current tab
 			return {
 				...prev,
 				[selectedTab]: updatedTabButtons
@@ -103,7 +103,7 @@ function App() {
 		})
 	}
 
-	// update state when user clicks a selected button to remove it from the filters
+	// remove a button from the selected list for the given tab
 	const handleRemoveSelectedButton = (id, tabName) => {
 
 		setSelectedButtonList((prev) => {
@@ -120,7 +120,7 @@ function App() {
 		})
 	}
 
-	// fetch the episodes that match the selected SearchButtons
+	// fetch episodes matching the selectedButtuons (filerts on backend)
 	useEffect(() => {
 
 		// if there are no buttons selected, do not fetch episodes
@@ -159,22 +159,21 @@ function App() {
 
 			<SearchContent
 				tabList={tabNameList}
-				selectedTab={selectedTab} // state
-				setSelectedTab={setSelectedTab} // state
+				selectedTab={selectedTab}
+				setSelectedTab={setSelectedTab}
 				selectedTabSearchButtonList={selectedTabSearchButtonList}
-				selectedButtonList={flatSelectedButtons} // to show if a search button is selected
-				tabName={selectedTabData?.tabName} // to show if a search button is selected
+				selectedButtonList={flatSelectedButtons} // selected buttons used for UI selection state
 				onButtonClick={handleSearchButtonClick}
 			/>
 
 			<div className="split-screen">
 				<SelectedButtonList
-					selectedButtonList={flatSelectedButtons} // state
+					selectedButtonList={flatSelectedButtons}
 					onClickRemove={handleRemoveSelectedButton}
 				/>
 				<EpisodeList 
 					episodeList={episodeList}
-					selectedButtonList={flatSelectedButtons}
+					selectedButtonList={flatSelectedButtons} // used to show message if nothing is selected
 				/>
 			</div>
 		</div>

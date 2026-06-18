@@ -7,8 +7,7 @@ export function SearchContent({
 	selectedTab, 
 	setSelectedTab, 
 	selectedTabSearchButtonList, 
-	selectedButtonList, // to show if a search button is selected
-	tabName, // to show if a search button is selected
+	selectedButtonList, // selected buttons used for UI selection state
 	onButtonClick 
 }) {
 
@@ -16,14 +15,14 @@ export function SearchContent({
 		<>
 			<SearchTabList
 				tabList={tabList}
-				selectedTab={selectedTab} // state
-				setSelectedTab={setSelectedTab} // state
+				selectedTab={selectedTab}
+				setSelectedTab={setSelectedTab}
 			/>
 
 			<SearchButtonList 
 				selectedTabSearchButtonList={selectedTabSearchButtonList}
-				selectedButtonList={selectedButtonList} // to show if a search button is selected
-				tabName={tabName} // to show if a search button is selected
+				selectedButtonList={selectedButtonList} // used to detrmine selected state of buttons
+				selectedTab={selectedTab}
 				onButtonClick={onButtonClick} 
 			/>
 		</>

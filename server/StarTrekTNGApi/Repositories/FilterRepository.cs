@@ -4,6 +4,7 @@ using StarTrekTNGApi.Models.DTOs;
 
 namespace StarTrekTNGApi.Repositories;
 
+// get all the available filters to search with
 public class FilterRepository : IFilterRepository
 {
     private readonly DbConnectionFactory _factory;

@@ -6,7 +6,7 @@ export function EpisodeList({ episodeList, selectedButtonList }) {
 			<h2>Episodes</h2>
 
 			{selectedButtonList.length === 0 ? (
-				<div>Select some buttons from the tabs to find episodes</div>
+				<div>Select some buttons from the tabs to find episodes.</div>
 			) : (
 				episodeList.length === 0 ? (
 					<div>No episodes found. Try removing some buttons.</div>

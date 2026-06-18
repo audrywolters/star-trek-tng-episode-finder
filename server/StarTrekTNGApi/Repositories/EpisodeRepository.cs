@@ -4,6 +4,7 @@ using StarTrekTNGApi.Models.DTOs;
 
 namespace StarTrekTNGApi.Repositories;
 
+// handles database access logic for episodes using Dapper
 public class EpisodeRepository : IEpisodeRepository
 {
     private readonly DbConnectionFactory _factory;
@@ -13,6 +14,7 @@ public class EpisodeRepository : IEpisodeRepository
         _factory = factory;
     }
 
+    // executes database function to retrieve filtered episodes
     public async Task<IEnumerable<EpisodeDto>> SearchEpisodes(
         int[]? characterIds,
         int[]? themeIds

@@ -22,6 +22,8 @@ public class EpisodesController : ControllerBase
     {
         try
         {
+            // FilterType corresponds to the filter category (e.g., Character, Theme)
+            // this is the tabs on the frontend
             var characterIds = filters
                 .Where(f => f.FilterType == FilterType.Character)
                 .Select(f => f.Id)
@@ -32,6 +34,8 @@ public class EpisodesController : ControllerBase
                 .Select(f => f.Id)
                 .ToArray();
 
+            // Fetch episodes based on selected filter IDs
+            // selectedButtons on frontend
             var episodes = await _repository.SearchEpisodes(
                 characterIds.Length == 0 ? null : characterIds,
                 themeIds.Length == 0 ? null : themeIds
